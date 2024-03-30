@@ -42,11 +42,7 @@ EXPOSE 80
 # COPY ./web_usuarioUGR/script_inicializacion.sh /usr/local/bin/script_inicializacion.sh
 # RUN chmod +x /usr/local/bin/script_inicializacion.sh
 
-# Install CronitorCLI
-RUN curl https://cronitor.io/install-linux?sudo=0 -H "API-KEY: <SDK KEY FROM https://cronitor.io/app/settings/api>"  | sh
 
-# Find and monitor all cron jobs, specifying a hostname so jobs are matched consistently on Cronitor
-RUN cronitor discover --auto --hostname juanluistr-apache-image:p1
 
 
 # Inicio Apache por defecto
