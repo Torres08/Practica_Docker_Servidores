@@ -1,0 +1,133 @@
+# 3,8 es la ultima version de docker, cada version van añadiendo caracteristicas
+version: '3.8'
+
+# la estructura de cada webX es un servicio, indicas la imagen que se va a usar, el build para construir la imagen, los volumenes que se van a usar y las redes que se van a usar
+# - image: imagen a usar
+# - dockerfile: fichero dockerfile que se va a usar
+# - volumes: volumenes que se van a usar
+# - networks: redes que se van a usar
+
+services:
+  web1:
+    image: juanluistr-apache-image:p1
+    privileged: true  
+    build:
+      context: .
+      dockerfile: DockerfileApache_juanluisUGR
+    volumes:
+      - ./web_usuarioUGR:/var/www/html
+    networks:
+      - red_web
+      - red_servicios
+    ports:
+      - "8081:80" 
+
+  web2:
+    image: juanluistr-apache-image:p1
+    build:
+      context: .
+      dockerfile: DockerfileApache_juanluisUGR
+    volumes:
+      - ./web_usuarioUGR:/var/www/html
+    networks:
+      - red_web
+      - red_servicios
+    ports:
+      - "8082:80" 
+
+  web3:
+    image: juanluistr-apache-image:p1
+    build:
+      context: .
+      dockerfile: DockerfileApache_juanluisUGR
+    volumes:
+      - ./web_usuarioUGR:/var/www/html
+    networks:
+      - red_web
+      - red_servicios
+    ports:
+      - "8083:80" 
+
+  web4:
+    image: juanluistr-apache-image:p1
+    build:
+      context: .
+      dockerfile: DockerfileApache_juanluisUGR
+    volumes:
+      - ./web_usuarioUGR:/var/www/html
+    networks:
+      - red_web
+      - red_servicios
+    ports:
+      - "8084:80"
+
+  web5:
+    image: juanluistr-apache-image:p1
+    build:
+      context: .
+      dockerfile: DockerfileApache_juanluisUGR
+    volumes:
+      - ./web_usuarioUGR:/var/www/html
+    networks:
+      - red_web
+      - red_servicios
+    ports:
+      - "8085:80"
+    
+
+  web6:
+    image: juanluistr-apache-image:p1
+    build:
+      context: .
+      dockerfile: DockerfileApache_juanluisUGR
+    volumes:
+      - ./web_usuarioUGR:/var/www/html
+    networks:
+      - red_web
+      - red_servicios
+    ports:
+      - "8086:80"
+
+  web7:
+    image: juanluistr-apache-image:p1
+    build:
+      context: .
+      dockerfile: DockerfileApache_juanluisUGR
+    volumes:
+      - ./web_usuarioUGR:/var/www/html
+    networks:
+      - red_web
+      - red_servicios
+    ports:
+      - "8087:80"
+
+  web8:
+    image: juanluistr-apache-image:p1
+    build:
+      context: .
+      dockerfile: DockerfileApache_juanluisUGR
+    volumes:
+      - ./web_usuarioUGR:/var/www/html
+    networks:
+      - red_web
+      - red_servicios
+    ports:
+      - "8088:80"
+
+
+networks:
+  red_web:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.10.0/24
+    
+
+  red_servicios:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.20.0/24
+

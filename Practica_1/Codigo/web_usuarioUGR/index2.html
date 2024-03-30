@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <h1>SWAP: Torres Ramos, Juan Luis </h1>
+    <p>La dirección IP del servidor Node es: <span id="ip"></span></p>
+
+    <script>
+        fetch('/ip')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('ip').innerText = data;
+            })
+            .catch(error => console.error('Error al obtener la IP:', error));
+    </script>
+</body>
+</html>

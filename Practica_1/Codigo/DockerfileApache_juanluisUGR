@@ -1,0 +1,53 @@
+# Establece la imagen base en Debian Buster slim
+FROM debian:buster-slim
+
+# Especifica el mantenedor de la imagen (obsoleto en Docker 1.13 y posteriores)
+MAINTAINER Juan Luis Torres Ramos
+
+# Actualiza los repositorios de apt-get y luego instala Apache, php y herramientas de red por ultimo borro los paquetes que acabo de instalar, buena practica para limpiar el contenedor
+RUN apt-get update && apt-get install -y \
+	apache2\
+	php php-cli \
+	iputils-ping \
+	netcat \
+	traceroute iptables cron\
+	&& rm -rf /var/lib/apt/lists/*
+
+
+# Configuro el ServerName a localhost y evito el warning
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
+# A.1: Oculto la versión de Apache y la información del sistema operativo
+# RUN echo "ServerTokens Prod" >> /etc/apache2/apache2.conf && \
+#    echo "ServerSignature Off" >> /etc/apache2/apache2.conf
+    
+# Borro el de por defecto y copio tu código PHP a la carpeta de documentos de Apache
+RUN rm /var/www/html/index.html
+COPY ./web_usuarioUGR/index.php /var/www/html/
+
+# A.1: Copio la configuración personalizada de PHP
+# COPY ./web_usuarioUGR/php-config.ini /etc/php/7.3/apache2/conf.d/custom.ini
+
+
+# A.4: Copiar el script de mantenimiento al contenedor
+COPY ./web_usuarioUGR/script_mantenimiento.sh /root/script_mantenimiento.sh
+RUN chmod +x /root/script_mantenimiento.sh
+COPY ./web_usuarioUGR/crontab /etc/cron.d/crontab
+RUN chmod 0644 /etc/cron.d/crontab && crontab /etc/cron.d/crontab 
+
+# Se expone el puerto 80 para que pueda accederse al servidor web
+EXPOSE 80
+
+# A.4 Copiar el script de inicialización al contenedor
+# COPY ./web_usuarioUGR/script_inicializacion.sh /usr/local/bin/script_inicializacion.sh
+# RUN chmod +x /usr/local/bin/script_inicializacion.sh
+
+# Install CronitorCLI
+RUN curl https://cronitor.io/install-linux?sudo=0 -H "API-KEY: <SDK KEY FROM https://cronitor.io/app/settings/api>"  | sh
+
+# Find and monitor all cron jobs, specifying a hostname so jobs are matched consistently on Cronitor
+RUN cronitor discover --auto --hostname juanluistr-apache-image:p1
+
+
+# Inicio Apache por defecto
+CMD ["apache2ctl", "-D", "FOREGROUND"]

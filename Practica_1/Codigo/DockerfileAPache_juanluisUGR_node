@@ -1,0 +1,12 @@
+
+FROM node:latest
+WORKDIR /app
+
+COPY ./web_usuarioUGR/index.html .
+COPY ./web_usuarioUGR/server.js .
+
+RUN npm install express ip
+
+EXPOSE 80
+
+CMD ["node", "server.js"]
