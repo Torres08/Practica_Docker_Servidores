@@ -1,0 +1,11 @@
+FROM nginx:latest
+
+COPY nginx.conf /etc/nginx/nginx.conf
+
+EXPOSE 80
+
+# en primer plano
+CMD [ "nginx", "-g", "daemon off;"]
+
+# en segundo plano
+# CMD ["nginx"]

@@ -8,16 +8,26 @@ version: '3.8'
 # - networks: redes que se van a usar
 
 services:
-  nginx:
-    build:
-      context: .
-      dockerfile: DockerfileNginx
-    volumes:
-      - ./nginx_conf:/etc/nginx/conf.d
+  gobetween:
+    image: yyyar/gobetween
     ports:
-      - "80:80"
+      - "3000:80"
+    restart: always
+    volumes:
+      - ./config.toml:/etc/gobetween/conf/gobetween.toml
+     
     networks:
-      - red_web
+      red_web:
+        ipv4_address: 192.168.10.50
+    depends_on:
+      - web1
+      - web2
+      - web3
+      - web4
+      - web5
+      - web6
+      - web7
+      - web8
   
   web1:
     image: juanluistr-apache-image:p1
@@ -28,10 +38,12 @@ services:
     volumes:
       - ./web_usuarioUGR:/var/www/html
     networks:
-      - red_web 
-      - red_servicios
-    ports:
-      - "8081:80" 
+      red_web:
+        ipv4_address: 192.168.10.9
+      red_servicios:
+        ipv4_address: 192.168.20.9
+    #ports:
+    #  - "8081:80" 
 
   web2:
     image: juanluistr-apache-image:p1
@@ -41,10 +53,12 @@ services:
     volumes:
       - ./web_usuarioUGR:/var/www/html
     networks:
-      - red_web
-      - red_servicios
-    ports:
-      - "8082:80" 
+      red_web:
+        ipv4_address: 192.168.10.2
+      red_servicios:
+        ipv4_address: 192.168.20.2
+    #ports:
+    #  - "8082:80" 
 
   web3:
     image: juanluistr-apache-image:p1
@@ -54,10 +68,12 @@ services:
     volumes:
       - ./web_usuarioUGR:/var/www/html
     networks:
-      - red_web
-      - red_servicios
-    ports:
-      - "8083:80" 
+      red_web:
+        ipv4_address: 192.168.10.3
+      red_servicios:
+        ipv4_address: 192.168.20.3
+    #ports:
+    #  - "8083:80" 
 
   web4:
     image: juanluistr-apache-image:p1
@@ -67,10 +83,12 @@ services:
     volumes:
       - ./web_usuarioUGR:/var/www/html
     networks:
-      - red_web
-      - red_servicios
-    ports:
-      - "8084:80"
+      red_web:
+        ipv4_address: 192.168.10.4
+      red_servicios:
+        ipv4_address: 192.168.20.4
+    #ports:
+    #  - "8084:80"
 
   web5:
     image: juanluistr-apache-image:p1
@@ -80,10 +98,12 @@ services:
     volumes:
       - ./web_usuarioUGR:/var/www/html
     networks:
-      - red_web
-      - red_servicios
-    ports:
-      - "8085:80"
+      red_web:
+        ipv4_address: 192.168.10.5
+      red_servicios:
+        ipv4_address: 192.168.20.5
+    #ports:
+    #  - "8085:80"
     
 
   web6:
@@ -94,10 +114,12 @@ services:
     volumes:
       - ./web_usuarioUGR:/var/www/html
     networks:
-      - red_web
-      - red_servicios
-    ports:
-      - "8086:80"
+      red_web:
+        ipv4_address: 192.168.10.6
+      red_servicios:
+        ipv4_address: 192.168.20.6
+    #ports:
+    #  - "8086:80"
 
   web7:
     image: juanluistr-apache-image:p1
@@ -107,10 +129,12 @@ services:
     volumes:
       - ./web_usuarioUGR:/var/www/html
     networks:
-      - red_web
-      - red_servicios
-    ports:
-      - "8087:80"
+      red_web:
+        ipv4_address: 192.168.10.7
+      red_servicios:
+        ipv4_address: 192.168.20.7
+    #ports:
+    #  - "8087:80"
 
   web8:
     image: juanluistr-apache-image:p1
@@ -120,11 +144,12 @@ services:
     volumes:
       - ./web_usuarioUGR:/var/www/html
     networks:
-      - red_web
-      - red_servicios
-    ports:
-      - "8088:80"
-
+      red_web:
+        ipv4_address: 192.168.10.8
+      red_servicios:
+        ipv4_address: 192.168.20.8
+    #ports:
+    # - "8088:80"
 
 
 networks:

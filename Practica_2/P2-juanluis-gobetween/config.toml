@@ -1,0 +1,22 @@
+[servers.http]
+bind = ":80"
+protocol = "tcp"
+balance = "roundrobin"  
+
+max_connections = 1000
+client_idle_timeout = "10m"
+backend_idle_timeout = "10m"
+backend_connection_timeout = "2s"
+
+[servers.http.discovery]
+kind = "static"
+static_list = [
+    "192.168.10.9:80",
+    "192.168.10.2:80",
+    "192.168.10.3:80",
+    "192.168.10.4:80",
+    "192.168.10.5:80",
+    "192.168.10.6:80",
+    "192.168.10.7:80",
+    "192.168.10.8:80"
+]

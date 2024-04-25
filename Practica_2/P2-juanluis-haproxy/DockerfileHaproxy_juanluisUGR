@@ -1,0 +1,12 @@
+# Usa la imagen oficial de HAProxy como base
+FROM haproxy:latest
+
+# Copia tu configuración personalizada de HAProxy al contenedor
+COPY haproxy.cfg /usr/local/etc/haproxy/haproxy.cfg
+
+# Exponer el puerto 80 (o cualquier otro puerto que uses en tu configuración)
+EXPOSE 80
+
+# Comando predeterminado para ejecutar HAProxy
+CMD ["haproxy", "-f", "/usr/local/etc/haproxy/haproxy.cfg"]
+
