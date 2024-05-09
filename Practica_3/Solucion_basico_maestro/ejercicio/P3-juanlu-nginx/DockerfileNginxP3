@@ -1,0 +1,14 @@
+# Utiliza una imagen base de Nginx
+FROM nginx:latest
+
+# Crear directorio para SSL
+RUN mkdir -p /etc/nginx/ssl
+
+
+# Expon el puerto 80 y 443
+EXPOSE 80 443
+
+# Inicia Nginx en primer plano
+CMD ["nginx", "-g", "daemon off;"]
+# Inicia Nginx en segundo plano
+# CMD ["nginx"]

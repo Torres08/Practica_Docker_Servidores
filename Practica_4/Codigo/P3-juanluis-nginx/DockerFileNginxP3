@@ -1,0 +1,11 @@
+# Partir de la imagen base oficial de Nginx
+FROM nginx:latest
+
+# Crear directorio para SSL
+RUN mkdir -p /etc/nginx/ssl 
+
+# Exponer el puerto 443 para el tráfico HTTPS
+EXPOSE 80 443
+
+CMD ["nginx", "-g", "daemon off;"]
+
