@@ -1,0 +1,24 @@
+# Partir de la imagen base oficial de Nginx
+FROM nginx:latest
+
+# Crear directorio para SSL
+RUN mkdir -p /etc/nginx/ssl 
+
+# Instalar iptables y tcpdump
+RUN apt-get update && apt-get install -y iptables tcpdump && rm -rf /var/lib/apt/lists/*
+
+# Copiar entrypoint + iptables
+COPY ./P4-juanluis-iptables-balanceador/entrypoint.sh /entrypoint.sh
+COPY ./P4-juanluis-iptables-balanceador/juanluis-iptables-balanceador.sh /juanluis-iptables-balanceador.sh
+
+# Permisos entrypoint
+RUN chmod +x /entrypoint.sh /juanluis-iptables-balanceador.sh
+
+# Exponer el puerto 443 para el tráfico HTTPS
+EXPOSE 80 443
+
+# Configurar el script de entrada
+ENTRYPOINT ["/entrypoint.sh"]
+
+CMD ["nginx", "-g", "daemon off;"]
+
