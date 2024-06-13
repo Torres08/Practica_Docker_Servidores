@@ -1,0 +1,42 @@
+# Establece la imagen base en Debian Buster slim
+FROM debian:buster-slim
+
+# Especifica el mantenedor de la imagen
+LABEL maintainer="Juan Luis Torres Ramos"
+
+# Actualiza los repositorios de apt-get y luego instala Apache, php y herramientas de red, finalmente borra los paquetes que acaba de instalar
+RUN apt-get update && apt-get install -y \
+	apache2 \
+	php php-cli \
+	iputils-ping \
+	netcat \
+	iptables \
+	traceroute iptables cron \
+	&& rm -rf /var/lib/apt/lists/*
+
+# Instalar módulo SSL + carpeta para los certificados
+RUN a2enmod ssl && mkdir /etc/apache2/ssl 
+
+# Configurar el ServerName a localhost y evitar el warning
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
+# Copiar script entrada entrypoint y script de reglas iptables
+COPY ./P4-juanluis-iptables-web/entrypoint.sh /entrypoint.sh
+COPY ./P4-juanluis-iptables-web/juanluis-iptables-web.sh /juanluis-iptables-web.sh
+
+# Darles los permisos de ejecucion
+RUN chmod +x /entrypoint.sh /juanluis-iptables-web.sh
+
+# Copiar los certificados SSL + configuración de Apache
+COPY ./juanluis-apache-ssl.conf /etc/apache2/sites-available/juanluis-apache-ssl.conf
+RUN a2ensite juanluis-apache-ssl.conf
+
+# Exponer el puerto 443 para el tráfico HTTPS
+EXPOSE 80 443
+
+# Configurar el script de entrada
+ENTRYPOINT ["/entrypoint.sh"]
+
+# Iniciar Apache por defecto
+CMD ["apache2ctl", "-D", "FOREGROUND"]
+

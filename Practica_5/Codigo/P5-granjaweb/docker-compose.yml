@@ -201,15 +201,28 @@ services:
 
 networks:
   red_web:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 192.168.10.0/24
+    external: True
+    #    driver: bridge
+    #    ipam:
+    #      driver: default
+    #      config:
+    #        - subnet: 192.168.10.0/24
 
   red_servicios:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 192.168.20.0/24
+    external: True
+    #driver: bridge
+    #ipam:
+    #  driver: default
+    #  config:
+    #    - subnet: 192.168.20.0/24
+
+# Para crear las redes anteriores
+# docker network create \
+#   --driver=bridge \
+#   --subnet=192.168.10.0/24 \
+#   red_web
+
+# docker network create \
+#   --driver=bridge \
+#   --subnet=192.168.20.0/24 \
+#   red_servicios
