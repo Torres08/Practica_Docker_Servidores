@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Interactivo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #333;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+            background-color: #444;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+        }
+        h1, h2, h3 {
+            margin-bottom: 10px;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .answer {
+            display: block;
+            background-color: #555;
+            color: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .answer:hover {
+            background-color: #777;
+        }
+        #next-button, #start-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #next-button:hover, #start-button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        #score-container {
+            display: none;
+        }
+        #incorrect-questions-container {
+            display: none;
+            margin-top: 20px;
+        }
+        ul {
+            padding-left: 0;
+            list-style-type: none;
+            text-align: left;
+        }
+        ul li {
+            margin-bottom: 5px;
+        }
+        #reset-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#reset-button:hover {
+    background-color: #c82333;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tests SWAP</h1>
+        <h2 id="author-name">PEPE</h2>
+        <div id="question-container">
+            <p id="question">Haz click en "Comenzar Test" para empezar. Disfruta</p>
+            <div id="question-options"></div> <!-- Aquí se mostrarán las opciones de respuesta -->
+        </div>
+        <div class="button-container" id="answer-buttons" style="display: none;">
+            <!-- No se necesitan botones aquí para las opciones -->
+        </div>
+        <button id="next-button" onclick="nextQuestion()" style="display: none;">Siguiente Pregunta</button>
+        <div>
+            <p>Respondidas: <span id="answered-count">0</span></p>
+            <p>Aciertos: <span id="correct-count">0</span></p>
+            <p>Fallos: <span id="incorrect-count">0</span></p>
+            <p>Preguntas disponibles: <span id="available-questions-count">0</span></p>
+            <p id="score-container" style="display: none;">Nota: <span id="score">0</span></p>
+        </div>
+        <div id="incorrect-questions-container" style="display: none;">
+            <h3>Preguntas falladas:</h3>
+            <ul id="incorrect-questions-list"></ul>
+        </div>
+        <button id="start-button" onclick="startTest()">Comenzar Test</button>
+        
+    </div>
+
+    <script>
+        const allQuestions = [
+
+        //TEMA 1
+            {
+                question: "escalabilidad es la capacidad de",
+                options: [
+                  "a. Mejorar un servidor.",
+                  "b. Aceptar un número determinado de peticiones.",
+                  "c. Dar soporte a un número creciente de usuarios.",
+                  "d. Procesar una petición web.",
+                ],
+                correct: "c"
+            },
+           
+            {
+            question: "Una granja web es un conjunto de servidores dedicados a servir contenido web a usuarios finales",
+                options: [    
+                  "a. Verdadero.",
+                  "b. Falso",
+                ],
+                correct: "a"
+            },
+
+            {
+                question: "Si el hardware y software comienzan a dar fallos, tendremos un problema de",
+                options: [
+                  "a. Carga del sistema.",
+                  "b. Viabilidad.",
+                  "c. Escalabilidad.",
+                  "d. Disponibilidad.",
+                ],
+                correct: "d"
+            },
+
+            {
+                question: "¿Qué es un cold spare server?",
+                options: [
+                  "a. Un servidor de refrigeración.",
+                  "b. Servidor de repuesto.",
+                  "c. Servidor replicado para uso en caso de que falle el principal.",
+                  "d. Servidor para pruebas software.",
+                ],
+                correct: "c"
+            },
+
+            {
+                question: "Con virtualización se puede…",
+                options: [
+                  "a. Utilizar distintos hardware en la misma máquina.",
+                  "b. Hacer uso eficiente de los recursos hardware.",
+                  "c. Reducir los tiempos de acceso y cómputo.",
+                  "d. Aumentar los recursos hardware",
+                ],
+                correct: "b"
+            },
+
+            {
+                question: "La consolidación de servidores es la reestructuración de la infraestructura del CPD.",
+                options: [
+                  "a. Verdadero.",
+                  "b. Falso.",
+                ],
+                correct: "a"
+            },
+
+            {
+                question: "El modelo cloud proporciona",
+                options: [
+                  "a. Servicios informáticos de bajo coste.",
+                  "b. Software a través de internet.",
+                  "c. Acceso por demanda a un conjunto compartido de recursos.",
+                  "d. Acceso privado a recursos informáticos.",
+                ],
+                correct: "c"
+            },
+
+            {
+                question: "El modelo cloud proporciona servicios de forma estática y robusta.",
+                options: [
+                  "a. Verdadero.",
+                  "b. Falso."
+                ],
+                correct: "b"
+            },
+
+            {
+                question: "Los modelos de servicio básicos del concepto Cloud Computing son…",
+                options: [
+                  "a. SaaS, CaaS, IaaS.",
+                  "b. SaaS, PaaS, IaaS.",
+                  "c. FaaS, PaaS, IaaS.",
+                  "d. SaaS, FaaS, DaaS.",
+                ],
+                correct: "b"
+            },
+
+            {
+                question: "La arquitectura más adecuada para montar una granja web es…",
+                options: [
+                  "a. Cliente-Servidor.",
+                  "b. Cliente-cola-cliente.",
+                  "c. Sistema aislado.",
+                  "d. Arquitectura n capas.",
+                ],
+                correct: "d"
+            },
+
+            {
+                question: "Aspectos de las GreenIT para reducción del consumo de un CPD son",
+                options: [
+                  "a. Reducción de la capacidad de cómputo de los servidores.",
+                  "b. Reduccion de la temperatura de la sala de servidores.",
+                  "c. Virtualización y utilización dinámica de recursos.",
+                  "d. Utilización estática de recursos a baja potencia.",
+                ],
+                correct: "c"
+            },
+
+//TEMA 2
+            {
+    question: "En relación a la disponibilidad, cuanto más alta es en un sitio web.",
+    options: [
+      "a. Más probable a no sufrir caídas no-programadas.",
+      "b. Más probable a sufrir caídas no-programadas.",
+      "c. Más probable a no sufrir caídas programadas.",
+      "d. Más probable a sufrir caídas programadas."
+    ],
+    correct: "a"
+},
+
+{
+    question: "¿Cómo podemos calcular la disponibilidad (AS) de un sistema?",
+    options: [
+      "a. s = Ac1 + (Ac1 * Ac2 * Ac3 * … Acn).",
+      "b. As = Ac1 * Ac2 * Ac3 * … Acn.",
+      "c. As = Ac1 + Ac2 + Ac3 + … Acn.",
+      "d. As = Ac1 + (Ac1 * Ac2 * Ac3 * … Acn)."
+    ],
+    correct: "b"
+},
+
+{
+    question: "Ampliar la memoria RAM se puede considerar escalado…",
+    options: [
+      "a. Hardware.",
+      "b. Vertical.",
+      "c. Horizontal.",
+      "d. Ninguna es correcta."
+    ],
+    correct: "b"
+},
+
+{
+    question: "¿Cuál de estas opciones tiene mayor impacto en escalabilidad?",
+    options: [
+      "a. Optimización del código.",
+      "b. Optimización del sistema.",
+      "c. Optimización del hardware del sistema.",
+      "d. Optimización del diseño del sistema."
+    ],
+    correct: "d"
+},
+
+{
+    question: "¿Para qué se usa la escala punto nueve?",
+    options: [
+      "a. Para definir la disponibilidad de un sistema.",
+      "b. Para medir la potencia de un servidor.",
+      "c. Para calcular la velocidad de los procesadores i9.",
+      "d. Para definir la escalabilidad de un sistema."
+    ],
+    correct: "a"
+},
+
+{
+    question: "¿Qué significa que un sitio web alcance un 100% de disponibilidad?",
+    options: [
+      "a. No sufrir caídas programadas.",
+      "b. No sufrir caídas no-programadas.",
+      "c. Sufrir caídas no-programadas.",
+      "d. Sufrir tanto caídas programadas como no-programadas."
+    ],
+    correct: "b"
+},
+
+{
+    question: "¿Qué es la ampliación vertical?",
+    options: [
+      "a. Incrementar la RAM, CPU o disco de un servidor.",
+      "b. Añadir máquinas a algún subsistema (web, bases de datos, etc).",
+      "c. Todas son correctas.",
+      "d. Todas son incorrectas."
+    ],
+    correct: "a"
+},
+
+{
+    question: "¿Qué es la ampliación horizontal?",
+    options: [
+      "a. Incrementar la RAM, CPU o disco de un servidor.",
+      "b. Añadir máquinas a algún subsistema (web, bases de datos, etc).",
+      "c. Todas son correctas.",
+      "d. Todas son incorrectas."
+    ],
+    correct: "b"
+},
+
+{
+    question: "¿Cómo podemos medir la disponibilidad de un sistema en base a un porcentaje?",
+    options: [
+      "a. 100 - (tiempoCaido / periodoTiempo) * 100",
+      "b. (tiempoCaido * periodoTiempo * 100) / 100",
+      "c. Numerodepeticiones / numeropeticionesservidas * 100",
+      "d. Ninguna es correcta."
+    ],
+    correct: "a"
+},
+
+{
+    question: "La disponibilidad se puede calcular como:",
+    options: [
+      "a. Uptime / (Uptime + Downtime)",
+      "b. Downtime / (Uptime + Downtime)",
+      "c. Downtime / (Upptime + Downtime) * 100",
+      "d. (Uptime + Downtime) / Uptime"
+    ],
+    correct: "a"
+},
+
+{
+    question: "La disponibilidad al replicar dos componentes en un sistema se calcula como:",
+    options: [
+      "a. Acn-1 + ((1 - Acn-1) * Acn)",
+      "b. Acn + ((1 - Acn-1) * Acn-1)",
+      "c. Ac2 + ((1 - Ac1) * Ac2)",
+      "d. Acn-2 + ((1 - Acn-2) * Acn)"
+    ],
+    correct: "a"
+},
+
+{
+    question: "La disponibilidad de una granja web contempla:",
+    options: [
+      "a. Disponibilidad de red, servidor y aplicación.",
+      "b. Disponibilidad de servidores y balanceador.",
+      "c. Disponibilidad de electricidad.",
+      "d. Disponibilidad de hardware y software."
+    ],
+    correct: "a"
+},
+
+
+//TEMA 3
+{
+    question: "¿Cuál de las siguientes formas es más segura de conectar una granja web a otras redes?",
+    options: [
+      "a. Configuración de DMZ doble.",
+      "b. Configuración de DMZ simple.",
+      "c. Configuración de DMZ extremo.",
+      "d. Configuración de DMZ modo cortafuegos."
+    ],
+    correct: "a"
+},
+
+{
+    question: "¿Con qué elementos de red se podría formar un 'Backbone'?",
+    options: [
+      "a. Un hub, un switch y un router.",
+      "b. Un hub y cables de red CAT 6.",
+      "c. Un switch y cables de red CAT 6.",
+      "d. Un router sin cables."
+    ],
+    correct: "a"
+},
+
+{
+    question: "¿Qué es una zona desmilitarizada o DMZ?",
+    options: [
+      "a. Área restringida o aislada, y no controlada.",
+      "b. Área restringida o aislada, y totalmente controlada.",
+      "c. Área no restringida, y totalmente controlada.",
+      "d. Ninguna es correcta."
+    ],
+    correct: "b"
+},
+
+{
+    question: "En una configuración sin DMZ",
+    options: [
+      "a. Tanto los servidores como otras máquinas están conectadas a la misma subred.",
+      "b. Solo los servidores de la granja web están conectados a la misma subred.",
+      "c. Los servidores y otras máquinas están conectadas a distintas subredes.",
+      "d. Ninguna es correcta."
+    ],
+    correct: "a"
+},
+
+{
+    question: "¿A qué nos referimos con el concepto Backbone en una granja web?",
+    options: [
+      "a. Eje principal de enlace entre máquinas.",
+      "b. Protocolo se seguridad encriptado.",
+      "c. Protocolo de seguridad web.",
+      "d. Área restringida o aislada a modo seguro."
+    ],
+    correct: "a"
+},
+
+{
+    question: "Desventaja de una configuración DMZ tradicional es",
+    options: [
+      "a. Coste económico elevado.",
+      "b. Sobrecarga de paquetes TCP/IP al servidor web.",
+      "c. Duplicidad de cortafuegos y difícil configuración.",
+      "d. Cortafuegos actúa como posible cuello de botella."
+    ],
+    correct: "d"
+},
+
+{
+    question: "El concepto NAT en una granja web corresponde a…",
+    options: [
+      "a. Nothing Access Time.",
+      "b. Network Active Time.",
+      "c. Network Address Translation.",
+      "d. Ninguna es correcta."
+    ],
+    correct: "c"
+},
+
+{
+    question: "Los servidores Multi-NIC pueden conectarse a…",
+    options: [
+      "a. Front-rail y Back-rail.",
+      "b. Solo al front-rail.",
+      "c. Solo al back-rail.",
+      "d. Ninguna es correcta."
+    ],
+    correct: "a"
+},
+
+{
+    question: "Una configuración recomendada para una granja web es…",
+    options: [
+      "a. Servidor web multi-NIC y servidor BD single-NIC.",
+      "b. Servidor web y BD, ambos single-NIC.",
+      "c. Servidor BD multi-NIC y servidor web single-NIC.",
+      "d. Servidor web y BD, ambos multi-NIC."
+    ],
+    correct: "a"
+},
+
+{
+    question: "El ancho de banda influye directamente en la calidad del servicio de la granja.",
+    options: [
+      "a. Verdadero.",
+      "b. Falso."
+    ],
+    correct: "a"
+},
+
+{
+    question: "El ancho de banda es la cantidad de información que puede influir por una conexión de red por unidad de tiempo.",
+    options: [
+      "a. Verdadero.",
+      "b. Falso."
+    ],
+    correct: "a"
+},
+
+{
+    question: "En relación al filtrado de paquetes en un router, una ACL es…",
+    options: [
+      "a. Una lista secuencial de sentencias de permiso o denegación.",
+      "b. Una lista segura de sentencias de filtrado de paquetes.",
+      "c. Una lista de paquetes para filtrar en el router.",
+      "d. Ninguna es correcta."
+    ],
+    correct: "a"
+},
+
+//TEMA 4
+{
+    question: "El algoritmo round-robin es el algoritmo de balanceo…",
+    options: [
+      "a. Basado en ponderación.",
+      "b. Basado en tiempo de respuesta.",
+      "c. Basado en turnos.",
+      "d. Basado en prioridad."
+    ],
+    correct: "c"
+},
+
+{
+    question: "¿Qué tarea adicional además de distribuir el tráfico entre varios servidores, realiza el balanceador?",
+    options: [
+      "a. Comprobar la disponibilidad de los servidores.",
+      "b. Proteger de diversos ataques.",
+      "c. Derivar en función del tipo de tráfico.",
+      "d. Todas son correctas."
+    ],
+    correct: "d"
+},
+
+{
+    question: "¿Qué es la Virtual IP (VIP)?",
+    options: [
+      "a. Se trata de estructurar varios cortafuegos de forma balanceada.",
+      "b. Dirección pública a la que acceden los usuarios.",
+      "c. Dirección privada a la que acceden los usuarios.",
+      "d. Ninguna es correcta."
+    ],
+    correct: "b"
+},
+
+{
+    question: "¿Qué se consigue con el balanceo de carga global?",
+    options: [
+      "a. Distribuir la carga entre varios centros de datos.",
+      "b. Evitar retrasos en las comunicaciones.",
+      "c. Redundancia ante errores.",
+      "d. Todas son correctas."
+    ],
+    correct: "d"
+},
+
+{
+    question: "¿Cuál de estos algoritmos asigna un peso para controlar el % de las peticiones?",
+    options: [
+      "a. Basado en prioridad.",
+      "b. Round-robin.",
+      "c. Basado en ponderación.",
+      "d. Basado en porcentaje."
+    ],
+    correct: "c"
+},
+
+{
+    question: "En un balanceo de carga global…",
+    options: [
+      "a. Se puede implementar con los DNS o BGP (Border Gateway Protocol).",
+      "b. Se balancean todas las peticiones a la vez de forma global.",
+      "c. No se realiza un balanceo entre centros de datos.",
+      "d. El tráfico va desde el navegador cliente al centro de datos más eficiente."
+    ],
+    correct: "a"
+},
+
+{
+    question: "¿Cuáles de las siguientes NO puede hacer un balanceador de carga?",
+    options: [
+      "a. ¿Cuáles de las siguientes NO puede hacer un balanceador de carga?",
+      "b. Puede manejar los protocolos de alto nivel.",
+      "c. Puede dar los servicios requeridos por los clientes.",
+      "d. Puede manejar los protocolos de nivel de red."
+    ],
+    correct: "c"
+},
+
+{
+    question: "El concepto “persistencia” hace referencia a:",
+    options: [
+      "a. El servicio está disponible la mayor parte del tiempo.",
+      "b. El balanceador redirige a todos los usuarios al mismo servidor.",
+      "c. Se mantiene a los usuarios en espera si el servicio no está disponible.",
+      "d. El tráfico de un mismo usuario se dirige al servidor que comenzó atendiendo."
+    ],
+    correct: "d"
+},
+
+{
+    question: "¿Cuál de las siguientes opciones no es una posible implementación de un balanceo de carga global?",
+    options: [
+      "a. Todas son posibles implementaciones.",
+      "b. Redirección HTTP.",
+      "c. GLSB basado en DNS.",
+      "d. GLSB basado en protocolos de enrutamiento."
+    ],
+    correct: "a"
+},
+
+{
+    question: "El balanceo de carga se relaciona con la capa OSI…",
+    options: [
+      "a. Capa 3 (Red).",
+      "b. Capa 4 (Transporte).",
+      "c. Capa 2 (Enlace).",
+      "d. Capa 5 (Sesión)."
+    ],
+    correct: "b"
+},
+
+{
+    question: "Con el algoritmo de balanceo basado en el menor número de conexiones…",
+    options: [
+      "a. Se consigue una distribución de carga adecuada entre máquinas similares.",
+      "b. Se evita la sobrecarga de las máquinas que pueden tener más trabajo.",
+      "c. Se tiene en cuenta la sobrecarga de las máquinas finales.",
+      "d. Todas son correctas."
+    ],
+    correct: "d"
+},
+
+{
+    question: "En el GSLB basado en DNS…",
+    options: [
+      "a. Cada dominio o subdominio tiene una o más zonas de autoridad.",
+      "b. Cada dominio tiene varios servidores DNS.",
+      "c. El servicio DNS presenta una estructura estática de traducción de nombres.",
+      "d. Ninguna es correcta."
+    ],
+    correct: "a"
+},
+
+//TEMA 5
+{
+    question: "¿A qué nos referimos con integridad cuando hablamos de asegurar el sistema web?",
+    options: [
+      "a. Los mensajes enviados deben ser exactamente los recibidos.",
+      "b. Las comunicaciones deben ser secretas íntegramente.",
+      "c. La comunicación debe estar disponible en el momento que se requiera.",
+      "d. Los mensajes recibidos deben parecerse a los enviados."
+    ],
+    correct: "a"
+},
+
+{
+    question: "¿Cuál de estas funciones no realiza el cortafuegos?",
+    options: [
+      "a. Bloquear y filtrar paquetes.",
+      "b. Detectar y eliminar virus.",
+      "c. Control del tráfico de red a nivel de protocolo de red (TCP o UDP).",
+      "d. Controlar protocolos de aplicación."
+    ],
+    correct: "b"
+},
+
+{
+    question: "¿En qué consiste la denegación implícita en una configuración de un cortafuegos?",
+    options: [
+      "a. Denegar todo el tráfico, tanto entrante como saliente.",
+      "b. Denegar el tráfico entrante implícitamente.",
+      "c. Denegar el tráfico saliente implícitamente.",
+      "d. Todas son correctas."
+    ],
+    correct: "a"
+},
+
+{
+    question: "¿Qué definen los privilegios de uso respecto a seguridad?",
+    options: [
+      "a. Acciones que pueden llevar a cabo cada tipo de usuario identificado.",
+      "b. Beneficios que tienen ciertos usuarios.",
+      "c. Comprueba si un usuario es reconocido.",
+      "d. Detecta si un atacante puede entrar en nuestra granja."
+    ],
+    correct: "a"
+},
+
+{
+    question: "¿Qué se entiende por defensa en profundidad respecto a seguridad?",
+    options: [
+      "a. Configurar varias capas de defensa para defender a varios niveles.",
+      "b. Configurar el cortafuegos.",
+      "c. Establecer políticas de seguridad.",
+      "d. Todas son correctas."
+    ],
+    correct: "a"
+},
+
+{
+    question: "¿Qué es Syn-Flood?",
+    options: [
+      "a. Tipo de ataque de denegación de servicio.",
+      "b. Tipo de ataque por hardware.",
+      "c. Inundación de la sala de servidores.",
+      "d. Ninguna es correcta."
+    ],
+    correct: "d"
+},
+
+{
+    question: "¿Qué tipo de ataque, por norma general, no puede evitar el balanceador?",
+    options: [
+      "a. TCP SYN",
+      "b. Ping of death",
+      "c. IP spoofing",
+      "d. Todas son correctas."
+    ],
+    correct: "d"
+},
+
+{
+    question: "¿Qué tres aspectos hay que garantizar para que un sistema sea seguro?",
+    options: [
+      "a. Autenticación, Autorización y Administración.",
+      "b. Registro, Integridad y Vulnerabilidad.",
+      "c. Confidencialidad, Integridad y Disponibilidad.",
+      "d. Ninguna es correcta."
+    ],
+    correct: "c"
+},
+
+{
+    question: "Las políticas de seguridad definen procedimientos de identificación de acceso y privilegios de uso.",
+    options: [
+      "a. Verdadero.",
+      "b. Falso."
+    ],
+    correct: "a"
+},
+
+{
+    question: "Las políticas de seguridad se pueden aplicar a…",
+    options: [
+      "a. Nivel físico.",
+      "b. Nivel de red.",
+      "c. Nivel de administrador.",
+      "d. Todas son correctas."
+    ],
+    correct: "d"
+},
+
+{
+    question: "Las copias de seguridad son un procedimiento recomendado para…",
+    options: [
+      "a. Asegurar la disponibilidad de los datos del sistema.",
+      "b. Garantizar la seguridad de los datos.",
+      "c. Recuperar la información en caso de pérdida.",
+      "d. Todas son correctas."
+    ],
+    correct: "a"
+},
+
+{
+    question: "Las listas de control de acceso…",
+    options: [
+      "a. Realizan filtrado de paquetes.",
+      "b. Definen políticas de seguridad.",
+      "c. Permiten controlar el acceso y autenticación de usuarios.",
+      "d. Registran los accesos al sistema."
+    ],
+    correct: "a"
+},
+
+//TEMA 6
+
+{
+    question: "Los resultados de medir prestaciones en un sistema web dependen de…",
+    options: [
+      "a. Los servidores finales, red y dispositivos de balanceo.",
+      "b. El balanceador de carga.",
+      "c. Los servidores finales.",
+      "d. Ninguna es correcta."
+    ],
+    correct: "a"
+},
+
+{
+    question: "¿Qué versión de HTTP es más eficiente en referencia al ancho de banda consumido?",
+    options: [
+      "a. HTTP 1.0",
+      "b. HTTP 1.1",
+      "c. HTTP 2.0",
+      "d. HTTP 2.1"
+    ],
+    correct: "b"
+},
+
+{
+    question: "¿Cuántas conexiones UDP se tienen que hacer entre cliente-servidor para establecer una conexión HTTP?",
+    options: [
+      "a. 1",
+      "b. 2",
+      "c. 3",
+      "d. Ninguna."
+    ],
+    correct: "d"
+},
+
+{
+    question: "¿Qué tipo de tráfico suele consumir generalmente más ancho de banda?",
+    options: [
+      "a. HTTP.",
+      "b. FTP/Streaming.",
+      "c. HTTPS.",
+      "d. SMTP."
+    ],
+    correct: "b"
+},
+
+{
+    question: "¿Qué tipo de prueba realizarías si quisieras detectar el punto de saturación del sistema?",
+    options: [
+      "a. Carga.",
+      "b. Estabilidad.",
+      "c. Sobrecarga.",
+      "d. Capacidad."
+    ],
+    correct: "d"
+},
+
+{
+    question: "¿Qué es httperf?",
+    options: [
+      "a. Herramienta de seguridad para conexiones HTTP.",
+      "b. Firewall para controlar conexiones HTTP.",
+      "c. Herramienta de test para medir rendimiento web.",
+      "d. Servidor web."
+    ],
+    correct: "c"
+},
+
+{
+    question: "¿Qué suele limitar el número de conexiones concurrentes en un balanceador de carga?",
+    options: [
+      "a. Las conexiones por segundo.",
+      "b. El número de conexión concurrentes no tiene límite.",
+      "c. Los servidores finales a los que redirige el tráfico el balanceador.",
+      "d. La memoria y/o procesador del balanceador."
+    ],
+    correct: "d"
+},
+
+{
+    question: "¿Cuál es el objetivo de medir las prestaciones de los sistemas web?",
+    options: [
+      "a. Comprobar si el sistema cumple unos mínimos requisitos de rendimiento.",
+      "b. Cumplir con la normativa establecida para los servidores web.",
+      "c. Ninguno, no se suelen medir las prestaciones de un sistema web.",
+      "d. Comprobar que los componentes del sistema web funcionan correctamente."
+    ],
+    correct: "a"
+},
+
+{
+    question: "El total de conexiones concurrentes suele ser la métrica más importante para:",
+    options: [
+      "a. Tienda web.",
+      "b. FTP/Streaming.",
+      "c. UDP.",
+      "d. Ninguna es correcta."
+    ],
+    correct: "a"
+},
+
+{
+    question: "Para el tráfico UDP el número de peticiones concurrentes no es un factor que afecte, ya que:",
+    options: [
+      "a. Es un protocolo con conexión.",
+      "b. La conexión consta de tres pasos.",
+      "c. Es un protocolo sin conexión.",
+      "d. UDP informa sobre el estado de la conexión."
+    ],
+    correct: "c"
+},
+
+{
+    question: "¿Qué prueba consiste en aplicar fuertes picos de carga durante cortos periodos?",
+    options: [
+      "a. Estrés.",
+      "b. Carga.",
+      "c. Humo.",
+      "d. Sobrecarga."
+    ],
+    correct: "d"
+},
+
+{
+    question: "¿Cuál es la métrica más usual de medir la velocidad a la que el balanceador gestiona las peticiones?",
+    options: [
+      "a. Megas/segundo.",
+      "b. Segundos/mega.",
+      "c. Bits/segundo.",
+      "d. Segundos/bits."
+    ],
+    correct: "c"
+}
+,
+
+
+];
+
+const questionsPerTest = 71; // Total de preguntas en el test
+        const maxScore = 10; // Puntaje máximo posible
+        const pointsPerQuestion = 1 // Puntos por pregunta
+        let availableQuestions = JSON.parse(localStorage.getItem('availableQuestions')) || allQuestions.slice();
+        let shuffledQuestions, currentQuestionIndex;
+        let correctCount = 0;
+        let incorrectCount = 0;
+        let answeredCount = 0;
+        let incorrectQuestions = [];
+
+        document.getElementById('available-questions-count').textContent = availableQuestions.length;
+
+        function startTest() {
+            if (availableQuestions.length === 0) {
+                alert('Reiniciando preguntas...');
+                resetQuestions();
+                // Mostrar el botón de inicio después de reiniciar
+                document.getElementById('start-button').style.display = 'block';
+                return; // Salir de la función después de reiniciar
+            }
+            
+
+            correctCount = 0;
+            incorrectCount = 0;
+            answeredCount = 0;
+            incorrectQuestions = [];
+            document.getElementById('correct-count').textContent = correctCount;
+            document.getElementById('incorrect-count').textContent = incorrectCount;
+            document.getElementById('answered-count').textContent = answeredCount;
+            document.getElementById('score-container').style.display = 'none';
+            document.getElementById('incorrect-questions-container').style.display = 'none';
+            document.getElementById('incorrect-questions-list').innerHTML = '';
+            shuffledQuestions = availableQuestions.sort(() => Math.random() - 0.5).slice(0, questionsPerTest);
+            currentQuestionIndex = 0;
+            document.getElementById('start-button').style.display = 'none';
+            document.getElementById('next-button').style.display = 'none';
+            document.getElementById('answer-buttons').style.display = 'none';
+            document.getElementById('author-name').style.display = 'none';
+
+            // Mostrar la primera pregunta del nuevo test
+            showQuestion(shuffledQuestions[currentQuestionIndex]);
+
+            // Mostrar los elementos relevantes para el nuevo test
+            document.getElementById('question-container').style.display = 'block';
+            document.getElementById('question-options').style.display = 'block'
+        }
+
+        function resetQuestions() {
+           alert('Reiniciando preguntas...');
+            availableQuestions = allQuestions.slice();
+            localStorage.setItem('availableQuestions', JSON.stringify(availableQuestions));
+            document.getElementById('available-questions-count').textContent = availableQuestions.length;
+            document.getElementById('start-button').style.display = 'block';
+        }
+
+        function showQuestion(question) {
+            document.getElementById('question').innerText = question.question;
+            document.getElementById('question').style.color = 'white'; // Restaurar el color original
+            const optionsContainer = document.getElementById('question-options');
+            optionsContainer.innerHTML = ''; // Limpiar el contenido anterior
+
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.classList.add('answer');
+                optionElement.textContent = option;
+                optionElement.setAttribute('data-option', String.fromCharCode(97 + index));
+                optionElement.setAttribute('onclick', `checkAnswer('${String.fromCharCode(97 + index)}')`);
+                optionsContainer.appendChild(optionElement);
+            });
+
+            document.getElementById('answer-buttons').style.display = 'block';
+        }
+
+        function checkAnswer(answer) {
+            const question = shuffledQuestions[currentQuestionIndex];
+            if (answer === question.correct) {
+                document.getElementById('question').style.color = 'green';
+                correctCount += pointsPerQuestion;
+                availableQuestions = availableQuestions.filter(q => q.question !== question.question);
+                localStorage.setItem('availableQuestions', JSON.stringify(availableQuestions));
+                document.getElementById('available-questions-count').textContent = availableQuestions.length;
+            } else {
+                document.getElementById('question').style.color = 'red';
+                incorrectCount++;
+                incorrectQuestions.push({ question: question.question, answer: answer });
+
+                // Resaltar la respuesta correcta
+                const correctOption = document.querySelector(`[data-option="${question.correct}"]`);
+                if (correctOption) {
+                    correctOption.style.backgroundColor = 'green';
+                    correctOption.style.color = 'white';
+                }
+            }
+            answeredCount++;
+            document.getElementById('correct-count').textContent = correctCount;
+            document.getElementById('incorrect-count').textContent = incorrectCount;
+            document.getElementById('answered-count').textContent = answeredCount;
+
+            // Deshabilitar las respuestas para esta pregunta
+            const answerButtons = document.querySelectorAll('.answer');
+            answerButtons.forEach(button => {
+                button.onclick = null; // Eliminar el manejador de eventos
+                button.style.cursor = 'default'; // Cambiar el cursor para indicar que está deshabilitado
+            });
+
+            document.getElementById('answer-buttons').style.display = 'none';
+            document.getElementById('next-button').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < shuffledQuestions.length) {
+                showQuestion(shuffledQuestions[currentQuestionIndex]);
+                document.getElementById('question').style.color = 'white';
+                document.getElementById('next-button').style.display = 'none';
+                document.getElementById('answer-buttons').style.display = 'block';
+            } else {
+                let adjustedCorrectCount = correctCount;
+
+                // Calcular penalización por respuestas incorrectas
+                incorrectQuestions.forEach(entry => {
+                    const question = allQuestions.find(q => q.question === entry.question);
+                    const incorrectPenalty = 1 / (question.options.length - 1);
+                    adjustedCorrectCount -= incorrectPenalty;
+                });
+
+                // Calcular la nota final
+                const score = (adjustedCorrectCount / questionsPerTest) * 10;
+
+                document.getElementById('question-container').style.display = 'none'; // Ocultar contenedor de preguntas
+                document.getElementById('question-options').style.display = 'none'; // Ocultar opciones de preguntas
+
+                document.getElementById('question').innerText = `Test terminado. Aciertos: ${correctCount}, Fallos: ${incorrectCount}, Nota: ${score.toFixed(2)}`;
+                document.getElementById('score').textContent = score.toFixed(2);
+                document.getElementById('score-container').style.display = 'block';
+                document.getElementById('next-button').style.display = 'none';
+                document.getElementById('start-button').style.display = 'block';
+                document.getElementById('author-name').style.display = 'block';
+
+                showIncorrectQuestions();
+            }
+        }
+
+        function showIncorrectQuestions() {
+            const incorrectQuestionsContainer = document.getElementById('incorrect-questions-container');
+            const incorrectQuestionsList = document.getElementById('incorrect-questions-list');
+            incorrectQuestions.forEach(entry => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${entry.question} (Tu respuesta: ${entry.answer})`;
+                incorrectQuestionsList.appendChild(listItem);
+            });
+            incorrectQuestionsContainer.style.display = 'block';
+            document.getElementById('answer-buttons').style.display = 'none'; // Asegurarse de ocultar las opciones de respuesta al mostrar las preguntas incorrectas
+            document.getElementById('question-options').style.display = 'none'; // Asegurar que las opciones estén ocultas
+        }
+    </script>
+
+<button id="reset-button" onclick="resetQuestions()">Reiniciar Preguntas</button>
+</body>
+</html>
